@@ -3,7 +3,7 @@ import {
     Footer,
     Header,
     Quantize,
-    ScatterPlot,
+    Plot,
     SelectionPanel,
 } from "./components/main";
 import { ThemeContext } from "./utils";
@@ -18,10 +18,7 @@ export const App: FC = () => {
 
             <SelectionPanel
                 titles={["Dataset", "Image"]}
-                components={[
-                    <ScatterPlot dataset={{}} label={"test"} algorithm={""} />,
-                    <Quantize />,
-                ]}
+                components={[<Plot theme={theme} />, <Quantize />]}
             />
 
             <Footer theme={theme} />

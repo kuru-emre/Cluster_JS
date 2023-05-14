@@ -1,20 +1,9 @@
 import { FC, ReactNode, useState } from "react";
-import { AppBar, Tabs, Tab, Typography, Box, useTheme } from "@mui/material";
+import { AppBar, Tabs, Tab, Box } from "@mui/material";
 import SwipeableViews from "react-swipeable-views";
+import { TabPanelType, SelectionPanelType } from "../../../types";
 
-interface TabPanelProps {
-    children?: ReactNode;
-    dir?: string;
-    index: number;
-    value: number;
-}
-
-interface TabPanelSetup {
-    titles: string[];
-    components: ReactNode[];
-}
-
-const TabPanel: FC<TabPanelProps> = (props) => {
+const TabPanel: FC<TabPanelType> = (props) => {
     const { children, value, index, ...other } = props;
 
     return (
@@ -27,7 +16,7 @@ const TabPanel: FC<TabPanelProps> = (props) => {
         >
             {value === index && (
                 <Box sx={{ p: 3 }}>
-                    <Typography>{children}</Typography>
+                    <div>{children}</div>
                 </Box>
             )}
         </div>
@@ -41,9 +30,7 @@ const a11yProps = (index: number) => {
     };
 };
 
-export const SelectionPanel: FC<TabPanelSetup> = (props) => {
-    const { titles, components } = props;
-    const theme = useTheme();
+export const SelectionPanel: FC<SelectionPanelType> = (props) => {
     const [value, setValue] = useState(0);
 
     const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
@@ -72,7 +59,7 @@ export const SelectionPanel: FC<TabPanelSetup> = (props) => {
                     variant="fullWidth"
                     aria-label="full width tabs example"
                 >
-                    {titles.map((title: string, index: number) => {
+                    {props.titles.map((title: string, index: number) => {
                         return (
                             <Tab
                                 key={index}
@@ -83,18 +70,10 @@ export const SelectionPanel: FC<TabPanelSetup> = (props) => {
                     })}
                 </Tabs>
             </AppBar>
-            <SwipeableViews
-                axis={theme.direction === "rtl" ? "x-reverse" : "x"}
-                index={value}
-                onChangeIndex={handleChangeIndex}
-            >
-                {components.map((component: ReactNode, index: number) => {
+            <SwipeableViews index={value} onChangeIndex={handleChangeIndex}>
+                {props.components.map((component: ReactNode, index: number) => {
                     return (
-                        <TabPanel
-                            value={value}
-                            index={index}
-                            dir={theme.direction}
-                        >
+                        <TabPanel key={index} value={value} index={index}>
                             {component}
                         </TabPanel>
                     );

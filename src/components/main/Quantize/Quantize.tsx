@@ -2,6 +2,7 @@ import { ChangeEvent, FC, useState } from "react";
 
 export const Quantize: FC = () => {
     const [image, setImage] = useState<File | null>(null);
+
     return (
         <div>
             {image && (
