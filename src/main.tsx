@@ -1,11 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { ThemeProvider } from "./utils/index.ts";
 import { App } from "./App.tsx";
+import { ThemeProvider } from "@mui/material";
+import { theme } from "./utils";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <React.StrictMode>
-        <ThemeProvider>
+        <ThemeProvider theme={theme}>
             <App />
         </ThemeProvider>
     </React.StrictMode>

@@ -1,27 +1,23 @@
-import { FC, useContext } from "react";
+import { FC } from "react";
 import {
     Footer,
     Header,
     Quantize,
-    Plot,
+    Cluster,
     SelectionPanel,
-} from "./components/main";
-import { ThemeContext } from "./utils";
-import "./styles/_main.scss";
+} from "./components";
 
 export const App: FC = () => {
-    const { theme } = useContext(ThemeContext);
-
     return (
-        <div className={`theme-container ${theme}`}>
-            <Header theme={theme} />
+        <div>
+            <Header />
 
             <SelectionPanel
                 titles={["Dataset", "Image"]}
-                components={[<Plot theme={theme} />, <Quantize />]}
+                components={[<Cluster />, <Quantize />]}
             />
 
-            <Footer theme={theme} />
+            <Footer />
         </div>
     );
 };

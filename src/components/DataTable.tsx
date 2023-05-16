@@ -1,13 +1,8 @@
-import { FC, useState } from "react";
-import { DatasetType } from "../../../types";
-import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
+import { FC } from "react";
+import { DataTableType } from "../types";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
 
-export const DataTable: FC<DatasetType> = (props) => {
-    const [axes, setAxes] = useState({
-        x: [],
-        y: [],
-    });
-
+export const DataTable: FC<DataTableType> = (props) => {
     const columns = () => {
         const headers: GridColDef[] = [
             { field: "id", headerName: "ID", width: 70 },
