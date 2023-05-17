@@ -1,5 +1,5 @@
 import { FC, ReactNode, useState } from "react";
-import { AppBar, Tabs, Tab, Box } from "@mui/material";
+import { AppBar, Tabs, Tab, Box, Grid } from "@mui/material";
 import SwipeableViews from "react-swipeable-views";
 import { TabPanelType, SelectionPanelType } from "../types";
 
@@ -42,7 +42,7 @@ export const SelectionPanel: FC<SelectionPanelType> = (props) => {
     };
 
     return (
-        <Box>
+        <>
             <AppBar position="static">
                 <Tabs
                     value={value}
@@ -72,6 +72,6 @@ export const SelectionPanel: FC<SelectionPanelType> = (props) => {
                     );
                 })}
             </SwipeableViews>
-        </Box>
+        </>
     );
 };

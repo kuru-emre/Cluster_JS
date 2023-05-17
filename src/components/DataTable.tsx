@@ -30,22 +30,21 @@ export const DataTable: FC<DataTableType> = (props) => {
     };
 
     return (
-        <div>
-            {props && (
-                <div style={{ height: 400, width: "100%" }}>
-                    <DataGrid
-                        rows={rows()}
-                        columns={columns()}
-                        initialState={{
-                            pagination: {
-                                paginationModel: { page: 0, pageSize: 5 },
-                            },
-                        }}
-                        pageSizeOptions={[5, 10]}
-                        checkboxSelection
-                    />
-                </div>
-            )}
-        </div>
+        <DataGrid
+            density="compact"
+            rows={rows()}
+            columns={columns()}
+            autoHeight={true}
+            initialState={{
+                pagination: {
+                    paginationModel: {
+                        pageSize: 10,
+                    },
+                },
+            }}
+            pageSizeOptions={[5, 10, 25]}
+            checkboxSelection
+            disableRowSelectionOnClick
+        />
     );
 };

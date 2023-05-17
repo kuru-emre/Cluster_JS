@@ -11,21 +11,22 @@ import {
     Legend,
 } from "chart.js";
 import {
-    Box,
     Button,
     Divider,
     FormControl,
+    Grid,
     InputLabel,
     MenuItem,
     Select,
     TextField,
+    Typography,
 } from "@mui/material";
-import { chartSettings, chartData, fetchURL } from "../utils";
+import { chartData, fetchURL } from "../utils";
 import { DataTable } from "./DataTable";
 
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
 
-const ALGORITHMS: string[] = ["kmeans", "meanshift", "dbscan"];
+const ALGORITHMS: string[] = ["k-means", "mean-shift", "DBSCAN"];
 
 export const Cluster: FC = () => {
     const textURL = useRef<HTMLTextAreaElement>();
@@ -90,142 +91,225 @@ export const Cluster: FC = () => {
     }, [chart.x_title, chart.y_title]);
 
     return (
-        <Box>
-            <h2>You can upload your dataset or use a url</h2>
+        <>
+            {!dataTable && (
+                <Grid container spacing={4} xs={12}>
+                    <Grid item xs={12}>
+                        <Typography variant="h5" align="center">
+                            You can your local dataset or use an url to upload.
+                        </Typography>
+                    </Grid>
 
-            <input
-                type="file"
-                accept=".csv, .ods, .xlsx"
-                ref={inputFile}
-                onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                    if (event.target.files != null) {
-                        readData(event.target.files[0]);
-                    }
-                }}
-            />
+                    <Grid item xs={12}>
+                        <Divider />
+                    </Grid>
 
-            <Box sx={{ display: "flex", justifyContent: "center", gap: "2%" }}>
-                <TextField
-                    id="dataset-url"
-                    name="url"
-                    label="Dataset URL"
-                    variant="outlined"
-                    inputRef={textURL}
-                />
+                    <Grid
+                        item
+                        xs={12}
+                        lg={6}
+                        display={"flex"}
+                        justifyContent={"center"}
+                    >
+                        <Button
+                            variant="contained"
+                            component="label"
+                            sx={{ width: 0.5 }}
+                        >
+                            Local Upload
+                            <input
+                                hidden
+                                accept=".csv, .ods, .xlsx"
+                                type="file"
+                                ref={inputFile}
+                                onChange={(
+                                    event: ChangeEvent<HTMLInputElement>
+                                ) => {
+                                    if (event.target.files != null) {
+                                        readData(event.target.files[0]);
+                                    }
+                                }}
+                            />
+                        </Button>
+                    </Grid>
 
-                <Button
-                    variant="contained"
-                    onClick={async () =>
-                        readData(
-                            await fetchURL(
-                                textURL.current?.value ?? "",
-                                "dataset"
-                            )
-                        )
-                    }
-                >
-                    Get the dataset
-                </Button>
-            </Box>
+                    <Grid
+                        item
+                        xs={12}
+                        lg={6}
+                        display={"flex"}
+                        justifyContent={"center"}
+                        gap={4}
+                    >
+                        <TextField
+                            id="dataset-url"
+                            name="url"
+                            label="Dataset URL"
+                            variant="outlined"
+                            inputRef={textURL}
+                        />
+
+                        <Button
+                            variant="contained"
+                            onClick={async () =>
+                                readData(
+                                    await fetchURL(
+                                        textURL.current?.value ?? "",
+                                        "dataset"
+                                    )
+                                )
+                            }
+                        >
+                            Get from URL
+                        </Button>
+                    </Grid>
+                </Grid>
+            )}
 
             {dataTable && (
-                <div>
-                    <button onClick={() => removeData()}>Remove</button>
+                <Grid container spacing={4} xs={12}>
+                    <Grid item xs={12}>
+                        <Button
+                            variant="contained"
+                            onClick={() => removeData()}
+                        >
+                            Remove
+                        </Button>
+                    </Grid>
 
-                    <Box
-                        sx={{
-                            display: "grid",
-                            gap: 3,
-                            padding: "2%",
-                        }}
-                    >
+                    <Grid item xs={12}>
                         <DataTable
                             columns={dataTable.columns}
                             rows={dataTable.rows}
                         />
+                    </Grid>
 
+                    <Grid item xs={12}>
                         <Divider />
+                    </Grid>
 
-                        <Box>
-                            <FormControl sx={{ width: "25%" }}>
-                                <InputLabel id="x-axis">X-Axis</InputLabel>
-                                <Select
-                                    labelId="x-axis-label"
-                                    id="x-axis"
-                                    value={chart.x_title}
-                                    name="x_title"
-                                    label="x-Axis"
-                                    onChange={handleChange}
-                                >
-                                    {dataTable.columns.map(
-                                        (column: string, index: number) => {
-                                            if (
-                                                column !== chart.y_title &&
-                                                typeof dataTable.rows[index][
-                                                    column
-                                                ] === "number"
-                                            ) {
-                                                return (
-                                                    <MenuItem
-                                                        key={`x-${index}`}
-                                                        value={column}
-                                                    >
-                                                        {column}
-                                                    </MenuItem>
-                                                );
-                                            }
-                                        }
-                                    )}
-                                </Select>
-                            </FormControl>
-                            <FormControl sx={{ width: "25%" }}>
-                                <InputLabel id="y-axis">Y-Axis</InputLabel>
-                                <Select
-                                    labelId="y-axis-label"
-                                    id="y-axis"
-                                    value={chart.y_title}
-                                    name="y_title"
-                                    label="y-Axis"
-                                    onChange={handleChange}
-                                >
-                                    {dataTable.columns.map(
-                                        (column: string, index: number) => {
-                                            if (
-                                                column !== chart.x_title &&
-                                                typeof dataTable.rows[index][
-                                                    column
-                                                ] === "number"
-                                            ) {
-                                                return (
-                                                    <MenuItem
-                                                        key={`y-${index}`}
-                                                        value={column}
-                                                    >
-                                                        {column}
-                                                    </MenuItem>
-                                                );
-                                            }
-                                        }
-                                    )}
-                                </Select>
-                            </FormControl>
-                            <TextField
-                                sx={{ width: "25%" }}
-                                id="chart-title"
-                                name="title"
-                                label="Title"
-                                variant="outlined"
+                    <Grid item xs={12} lg={4}>
+                        <TextField
+                            sx={{ width: 1 }}
+                            id="chart-title"
+                            name="title"
+                            label="Chart Title"
+                            variant="outlined"
+                            onChange={handleChange}
+                            value={chart.title}
+                        />
+                    </Grid>
+
+                    <Grid item xs={12} lg={4}>
+                        <FormControl sx={{ width: 1 }}>
+                            <InputLabel id="x-axis">X-Axis</InputLabel>
+                            <Select
+                                labelId="x-axis-label"
+                                id="x-axis"
+                                value={chart.x_title}
+                                name="x_title"
+                                label="x-Axis"
                                 onChange={handleChange}
-                                value={chart.title}
-                            />
-                        </Box>
+                            >
+                                {dataTable.columns.map(
+                                    (column: string, index: number) => {
+                                        if (
+                                            column !== chart.y_title &&
+                                            typeof dataTable.rows[index][
+                                                column
+                                            ] === "number"
+                                        ) {
+                                            return (
+                                                <MenuItem
+                                                    key={`x-${index}`}
+                                                    value={column}
+                                                >
+                                                    {column}
+                                                </MenuItem>
+                                            );
+                                        }
+                                    }
+                                )}
+                            </Select>
+                        </FormControl>
+                    </Grid>
 
+                    <Grid item xs={12} lg={4}>
+                        <FormControl sx={{ width: 1 }}>
+                            <InputLabel id="y-axis">Y-Axis</InputLabel>
+                            <Select
+                                labelId="y-axis-label"
+                                id="y-axis"
+                                value={chart.y_title}
+                                name="y_title"
+                                label="y-Axis"
+                                onChange={handleChange}
+                            >
+                                {dataTable.columns.map(
+                                    (column: string, index: number) => {
+                                        if (
+                                            column !== chart.x_title &&
+                                            typeof dataTable.rows[index][
+                                                column
+                                            ] === "number"
+                                        ) {
+                                            return (
+                                                <MenuItem
+                                                    key={`y-${index}`}
+                                                    value={column}
+                                                >
+                                                    {column}
+                                                </MenuItem>
+                                            );
+                                        }
+                                    }
+                                )}
+                            </Select>
+                        </FormControl>
+                    </Grid>
+
+                    <Grid item xs={12} lg={4}>
+                        <FormControl sx={{ width: 1 }}>
+                            <InputLabel id="algorithm">Algorithm</InputLabel>
+                            <Select
+                                labelId="algorithm-label"
+                                id="algorithm"
+                                value={chart.alg}
+                                name="alg"
+                                label="Algorithm"
+                                onChange={handleChange}
+                            >
+                                {ALGORITHMS.map(
+                                    (alg: string, index: number) => {
+                                        return (
+                                            <MenuItem
+                                                key={`alg-${index}`}
+                                                value={alg}
+                                            >
+                                                {alg}
+                                            </MenuItem>
+                                        );
+                                    }
+                                )}
+                            </Select>
+                        </FormControl>
+                    </Grid>
+
+                    <Grid item xs={12}>
                         <Divider />
-                    </Box>
+                    </Grid>
 
-                    <Scatter options={chartSettings} data={chartData(chart)} />
-                </div>
+                    <Grid
+                        item
+                        xs={12}
+                        sx={{ height: "500px" }}
+                        display={"flex"}
+                        justifyContent={"center"}
+                    >
+                        <Scatter {...chartData(chart)} />
+                    </Grid>
+                </Grid>
             )}
-        </Box>
+        </>
     );
 };

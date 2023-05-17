@@ -1,4 +1,4 @@
-export { chartData, chartSettings } from "./scripts/chartConfig";
+export { chartData } from "./scripts/chartConfig";
 export { fetchURL } from "./scripts/fetchURL";
 export { dbScan } from "./algorithms/dbScan";
 export { kMeans } from "./algorithms/kMeans";

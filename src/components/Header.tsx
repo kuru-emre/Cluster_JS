@@ -1,13 +1,10 @@
+import { Typography } from "@mui/material";
 import { FC } from "react";
 
 export const Header: FC = () => {
     return (
-        <div>
-            <div>
-                <img src="img/waves.svg" alt="Waves" />
-            </div>
-
-            <h1>Cluster.js</h1>
-        </div>
+        <Typography variant="h2" gutterBottom>
+            Cluster.js
+        </Typography>
     );
 };
