@@ -1,6 +1,6 @@
 import { RowType } from ".";
 
-export type DataTableType = {
+export type TableType = {
     columns: string[];
     rows: RowType[];
 };

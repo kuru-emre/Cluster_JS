@@ -1,8 +1,8 @@
 import { FC } from "react";
-import { DataTableType } from "../types";
+import { TableType } from "../types";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 
-export const DataTable: FC<DataTableType> = (props) => {
+export const DataTable: FC<TableType> = (props) => {
     const columns = () => {
         const headers: GridColDef[] = [
             { field: "id", headerName: "ID", width: 70 },

@@ -4,3 +4,5 @@ export { Footer } from "./Footer";
 export { Header } from "./Header";
 export { Quantize } from "./Quantize";
 export { SelectionPanel } from "./SelectionPanel";
+export { FileReader } from "./FileReader";
+export { Chart } from "./Chart";

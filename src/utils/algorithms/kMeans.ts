@@ -1,30 +1,6 @@
-export const kMeans = (data, props) => {
-    const { k } = props;
-    // Step 1: Initialize centroids randomly
-    let centroids = initializeCentroids(data, k);
+import { AxisType } from "../../types";
 
-    for (let iteration = 0; iteration < maxIterations; iteration++) {
-        // Step 2: Assign each data point to the nearest centroid
-        const clusters = assignDataToCentroids(data, centroids);
-
-        // Step 3: Recalculate the centroids
-        const newCentroids = calculateNewCentroids(clusters);
-
-        // Step 4: Check convergence
-        if (centroidsEqual(centroids, newCentroids)) {
-            break;
-        }
-
-        centroids = newCentroids;
-    }
-
-    return {
-        clusters,
-        centroids,
-    };
-};
-
-export const initializeCentroids = (data, k) => {
+export const initializeCentroids = (data: AxisType[], k: number) => {
     const centroids = [];
 
     // Choose k random data points as centroids
@@ -37,8 +13,8 @@ export const initializeCentroids = (data, k) => {
     return centroids;
 };
 
-export const assignDataToCentroids = (data, centroids) => {
-    const clusters = new Array(centroids.length).fill().map(() => []);
+export const assignDataToCentroids = async (data: AxisType[], centroids: AxisType[]) => {
+    const clusters = new Array(centroids.length).fill([]).map(() => []);
 
     // Assign each data point to the nearest centroid
     for (const point of data) {
@@ -49,32 +25,37 @@ export const assignDataToCentroids = (data, centroids) => {
         clusters[nearestCentroidIndex].push(point);
     }
 
+    console.log(clusters);
+
     return clusters;
 };
 
-export const calculateNewCentroids = (clusters) => {
+export const calculateNewCentroids = async (clusters: AxisType[][]) => {
     return clusters.map((cluster) => {
         const clusterSize = cluster.length;
 
         // Calculate the mean of each feature
-        const centroid = cluster.reduce((accumulator, point) => {
-            return accumulator.map((value, i) => value + point[i]);
-        }, new Array(cluster[0].length).fill(0));
+        const centroid = cluster.reduce(
+            (accumulator, point) => {
+                const xAxis = accumulator.x + point.x;
+                const yAxis = accumulator.y + point.y;
 
-        return centroid.map((value) => value / clusterSize);
+                return { x: xAxis, y: yAxis };
+            },
+            { x: 0, y: 0 }
+        );
+
+        centroid.x = centroid.x / clusterSize;
+        centroid.y = centroid.y / clusterSize;
+
+        return centroid;
     });
 };
 
-const euclideanDistance = (pointA, pointB) => {
-    return Math.sqrt(
-        pointA.reduce(
-            (accumulator, value, i) =>
-                accumulator + Math.pow(value - pointB[i], 2),
-            0
-        )
-    );
+const euclideanDistance = (pointA: AxisType, pointB: AxisType) => {
+    return Math.hypot(pointB.x - pointA.x, pointB.y - pointA.y);
 };
 
-export const centroidsEqual = (centroidsA, centroidsB) => {
+export const centroidsEqual = (centroidsA: AxisType[], centroidsB: AxisType[]) => {
     return JSON.stringify(centroidsA) === JSON.stringify(centroidsB);
 };

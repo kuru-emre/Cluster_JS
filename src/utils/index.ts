@@ -1,6 +1,7 @@
-export { chartData } from "./scripts/chartConfig";
+export { chartConfig } from "./scripts/chartConfig";
 export { fetchURL } from "./scripts/fetchURL";
 export { dbScan } from "./algorithms/dbScan";
-export { kMeans } from "./algorithms/kMeans";
+export { useAlgorithms } from "./scripts/useAlgorithms";
 export { meanShift } from "./algorithms/meanShift";
 export { theme } from "./theme";
+export { algorithms } from "./scripts/algorithms";

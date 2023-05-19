@@ -2,13 +2,14 @@ import { AxisType, ChartType } from "../../types";
 
 const COLORS: string[] = ["red", "blue", "green", "yellow", "purple", "orange"];
 
-export const chartData = (props: ChartType) => {
+export const chartConfig = (props: ChartType) => {
+    
     return {
         data: {
             datasets: [
                 {
                     label: props.title,
-                    data: props.data.map((dataPoint: AxisType) => {
+                    data: props.data?.map((dataPoint: AxisType) => {
                         return { x: dataPoint.x, y: dataPoint.y };
                     }),
                     pointRadius: 5.5,
