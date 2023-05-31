@@ -1,4 +1,4 @@
-import { setChartData, useAppDispatch, useAppSelector } from "../../redux";
+import { setCentroids, setClusters, useAppDispatch, useAppSelector } from "../../redux";
 import { AxisType } from "../../types";
 import {
     assignDataToCentroids,
@@ -18,16 +18,18 @@ export const useAlgorithms = () => {
 
         // Step 1: Initialize centroids randomly
         let centroids = initializeCentroids(chart.data, k)
-        dispatch(setChartData(centroids))
+        dispatch(setCentroids(centroids))
 
         while (!centroidsEqual(centroids, newCentroids)) {
-            // Step 2: Assign each data point to the nearest centroid
+            
             clusters = await assignDataToCentroids(chart.data, centroids);
+            dispatch(setClusters(clusters))
 
             // Step 3: Recalculate the centroids
             newCentroids = await calculateNewCentroids(clusters);
+            dispatch(setCentroids(newCentroids))
 
-            centroids = newCentroids;
+
         }
     };
 

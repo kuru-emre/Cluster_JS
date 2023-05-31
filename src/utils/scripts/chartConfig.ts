@@ -9,10 +9,10 @@ export const chartConfig = (props: ChartType) => {
             datasets: [
                 {
                     label: props.title,
-                    data: props.data?.map((dataPoint: AxisType) => {
-                        return { x: dataPoint.x, y: dataPoint.y };
+                    data: props.data.flat(1).map((dataPoint: AxisType) => {
+                        return {x: dataPoint.x, y: dataPoint.y}
                     }),
-                    pointRadius: 5.5,
+                    pointRadius: 5.5,  
                     pointStyle: "circle",
                     pointBackgroundColor: [],
                     showLine: false,

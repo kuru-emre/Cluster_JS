@@ -1,33 +1,41 @@
 import { AxisType } from "../../types";
 
 export const initializeCentroids = (data: AxisType[], k: number) => {
-    const centroids = [];
+    return new Promise(async (resolve) => {
+        const centroids: AxisType[] = [];
 
-    // Choose k random data points as centroids
-    for (let i = 0; i < k; i++) {
-        const randomX = Math.floor(Math.random() * data.length);
-        const randomY = Math.floor(Math.random() * data.length);
-        centroids.push({ x: randomX, y: randomY });
-    }
+        setTimeout(() => {
+            // Choose k random data points as centroids
+            for (let i = 0; i < k; i++) {
+                const randomX = Math.floor(Math.random() * data.length);
+                const randomY = Math.floor(Math.random() * data.length);
+                centroids.push({ x: randomX, y: randomY });
+            }
 
-    return centroids;
+            resolve(centroids)
+
+        }, 2000);
+    })
 };
 
-export const assignDataToCentroids = async (data: AxisType[], centroids: AxisType[]) => {
-    const clusters = new Array(centroids.length).fill([]).map(() => []);
+export const assignDataToCentroids = (data: AxisType[], centroids: AxisType[]) => {
+    return new Promise(async (resolve) => {
+        const clusters = new Array(centroids.length).fill([]).map(() => []);
 
-    // Assign each data point to the nearest centroid
-    for (const point of data) {
-        const distances = centroids.map((centroid) =>
-            euclideanDistance(point, centroid)
-        );
-        const nearestCentroidIndex = distances.indexOf(Math.min(...distances));
-        clusters[nearestCentroidIndex].push(point);
-    }
+        setTimeout(() => {
+            // Assign each data point to the nearest centroid
+            for (const point of data) {
+                const distances = centroids.map((centroid) =>
+                    euclideanDistance(point, centroid)
+                );
+                const nearestCentroidIndex = distances.indexOf(Math.min(...distances));
+                clusters[nearestCentroidIndex].push(point);
+            }
 
-    console.log(clusters);
+            resolve(clusters);
 
-    return clusters;
+        }, 2000);
+    })
 };
 
 export const calculateNewCentroids = async (clusters: AxisType[][]) => {
