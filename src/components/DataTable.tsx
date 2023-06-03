@@ -43,7 +43,6 @@ export const DataTable: FC<TableType> = (props) => {
                 },
             }}
             pageSizeOptions={[5, 10, 25]}
-            checkboxSelection
             disableRowSelectionOnClick
         />
     );

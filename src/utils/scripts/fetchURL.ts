@@ -13,9 +13,9 @@ export const fetchURL = async (url: string, type: string | undefined) => {
         if (pattern.test(url)) {
             const blob = await fetch(url).then((res) => res.blob());
             return blob;
-        } 
+        }
 
-    } 
+    }
 
     return null
 };

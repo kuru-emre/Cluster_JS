@@ -1,7 +1,7 @@
 import { FC, ReactNode, useState } from "react";
-import { AppBar, Tabs, Tab, Box, Grid } from "@mui/material";
-import SwipeableViews from "react-swipeable-views";
+import { AppBar, Tabs, Tab, Box } from "@mui/material";
 import { TabPanelType, SelectionPanelType } from "../types";
+import SwipeableViews from "react-swipeable-views";
 
 const TabPanel: FC<TabPanelType> = (props) => {
     const { children, value, index, ...other } = props;

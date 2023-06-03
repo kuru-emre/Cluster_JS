@@ -2,14 +2,14 @@ import { Grid, Typography, Divider, Button, TextField } from "@mui/material";
 import { FC, useRef } from "react";
 import { fetchURL } from "../utils";
 import { read, utils } from "xlsx";
-import { useAppDispatch, setTableColumns, setTableRows } from "../redux";
+import { useAppDispatch, setTableColumns, setTableRows, setTableName } from "../redux";
 import { RowType } from "../types";
 
 export const FileReader: FC = () => {
     const textURL = useRef<HTMLTextAreaElement>();
     const dispatch = useAppDispatch();
 
-    const readData = async (file: Blob | null) => {
+    const readData = async (file: Blob | File | null) => {
         const dataset = await file?.arrayBuffer();
         const workbook = read(dataset);
         const worksheet = workbook.Sheets[workbook.SheetNames[0]];
@@ -21,6 +21,7 @@ export const FileReader: FC = () => {
 
         const rows = utils.sheet_to_json<RowType>(worksheet);
 
+        dispatch(setTableName(file?.name))
         dispatch(setTableColumns(columns));
         dispatch(setTableRows(rows));
     };

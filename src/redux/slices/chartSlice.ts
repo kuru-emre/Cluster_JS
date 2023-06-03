@@ -10,6 +10,7 @@ const initialState: ChartType = {
         name: "",
         props: [],
     },
+    status: ""
 };
 
 export const chartSlice = createSlice({
@@ -28,19 +29,15 @@ export const chartSlice = createSlice({
         setChartData: (state, action: PayloadAction<ChartType["data"]>) => {
             state.data = action.payload;
         },
-        setCentroids: (state, action: PayloadAction<ChartType["data"]>) => {
-            state.data = [...action.payload, ...state.data];
-        },
-        setClusters: (state, action: PayloadAction<ChartType["data"]>) => {
-            state.data = state.data.filter((cluster, index) => index === 0)
-            state.data = [...state.data, ...action.payload]
-        },
         setChartAlgName: (state, action: PayloadAction<ChartType["alg"]["name"]>) => {
             state.alg.name = action.payload;
             state.alg.props = []
         },
         setChartAlgProps: (state, action: PayloadAction<ChartType["alg"]["props"]>) => {
             state.alg.props[action.payload[0]] = action.payload[1] 
+        },
+        setStatus: (state, action: PayloadAction<ChartType['status']>) => {
+            state.status = action.payload
         },
         resetChart: () => {
             return initialState;
@@ -53,10 +50,9 @@ export const {
     setChartXTitle,
     setChartYTitle,
     setChartData,
-    setCentroids,
-    setClusters,
     setChartAlgName,
     setChartAlgProps,
+    setStatus,
     resetChart,
 } = chartSlice.actions;
 export default chartSlice.reducer;

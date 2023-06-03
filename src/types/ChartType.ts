@@ -6,4 +6,5 @@ export type ChartType = {
     y_title: string;
     data: AxisType[][];
     alg: AlgorithmType;
+    status?: string; 
 };

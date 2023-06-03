@@ -1,32 +1,52 @@
-import { AxisType, ChartType } from "../../types";
+import { ChartDataset } from "chart.js";
+import { ChartType } from "../../types";
 
 const COLORS: string[] = ["red", "blue", "green", "yellow", "purple", "orange"];
 
+const isClustered = (props: ChartType): ChartDataset<'scatter'>[] => {
+    if (props.data.length == 1) {
+        return [{
+            label: "unclustered",
+            data: [...props.data.flat()],
+            pointRadius: 5,
+            pointStyle: "circle",
+            pointBackgroundColor: ["grey"]
+        }]
+    }
+
+    const centroids = props.data[0];
+    const clusters = props.data.slice(1);
+    const datasets: ChartDataset<'scatter'>[] = []
+
+    clusters.forEach((cluster, index) => {
+        datasets.push({
+            label: `Cluster_${index + 1}`,
+            data: [centroids[index], ...cluster],
+            pointRadius: [15].concat(cluster.map(() => 5)),
+            pointStyle: ['triangle'].concat(cluster.map(() => "circle")),
+            pointBackgroundColor: [centroids[index], ...cluster].map(() => COLORS[index])
+        })
+    })
+
+    return datasets;
+}
+
 export const chartConfig = (props: ChartType) => {
-    
     return {
         data: {
-            datasets: [
-                {
-                    label: props.title,
-                    data: props.data.flat(1).map((dataPoint: AxisType) => {
-                        return {x: dataPoint.x, y: dataPoint.y}
-                    }),
-                    pointRadius: 5.5,  
-                    pointStyle: "circle",
-                    pointBackgroundColor: [],
-                    showLine: false,
-                    backgroundColor: "aqua",
-                },
-            ],
+            datasets: isClustered(props)
         },
         options: {
-            maintainAspectRatio: false,
-            legend: {
-                labels: {
-                    fontSize: 30,
-                },
+            plugins: {
+                title: {
+                    display: true,
+                    text: props.title,
+                    font: {
+                        size: 18
+                    }
+                }
             },
+            maintainAspectRatio: false,
             scales: {
                 y: {
                     beginAtZero: true,

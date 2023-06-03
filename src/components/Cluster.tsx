@@ -1,28 +1,8 @@
+import { useAppDispatch, useAppSelector, setChartTitle, setChartXTitle, setChartYTitle, setChartData, resetTable, resetChart, setChartAlgName, setChartAlgProps, } from "../redux";
+import { Alert, Button, Divider, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Typography, } from "@mui/material";
+import { DataTable, Plot, FileReader } from "./index";
+import DeleteIcon from '@mui/icons-material/Delete';
 import { FC, useEffect } from "react";
-import { AxisType, RowType } from "../types";
-import {
-    Button,
-    Divider,
-    FormControl,
-    Grid,
-    InputLabel,
-    MenuItem,
-    Select,
-    TextField,
-} from "@mui/material";
-import { DataTable, Chart, FileReader } from "./index";
-import {
-    useAppDispatch,
-    useAppSelector,
-    setChartTitle,
-    setChartXTitle,
-    setChartYTitle,
-    setChartData,
-    resetTable,
-    resetChart,
-    setChartAlgName,
-    setChartAlgProps,
-} from "../redux";
 import { algorithms } from "../utils";
 
 export const Cluster: FC = () => {
@@ -36,16 +16,12 @@ export const Cluster: FC = () => {
     };
 
     useEffect(() => {
-        const data: AxisType[] = [];
+        const data = table.rows?.map((dataPoint) => ({
+            x: dataPoint[chart.x_title],
+            y: dataPoint[chart.y_title],
+        }));
 
-        table.rows?.map((dataPoint: RowType) => {
-            data.push({
-                x: dataPoint[chart.x_title],
-                y: dataPoint[chart.y_title],
-            });
-        });
-
-        dispatch(setChartData(data));
+        dispatch(setChartData([data]));
     }, [chart.x_title, chart.y_title]);
 
     return (
@@ -54,10 +30,16 @@ export const Cluster: FC = () => {
                 <FileReader />
             ) : (
                 <Grid container spacing={4} xs={12}>
-                    <Grid item xs={12}>
-                        <Button variant="contained" onClick={removeData}>
+                    <Grid item xs={3} lg={1}>
+                        <Button fullWidth startIcon={<DeleteIcon />} variant="contained" onClick={removeData}>
                             Remove
                         </Button>
+                    </Grid>
+
+                    <Grid item xs={9} lg={11}>
+                        <Alert variant="filled" severity="info" sx={{ display: "flex", justifyContent: "center" }}>
+                            <Typography>The name of the file is: {table.name}</Typography>
+                        </Alert>
                     </Grid>
 
                     <Grid item xs={12}>
@@ -93,24 +75,20 @@ export const Cluster: FC = () => {
                                     dispatch(setChartXTitle(e.target.value))
                                 }
                             >
-                                {table.columns.map(
-                                    (column: string, index: number) => {
-                                        if (
-                                            column !== chart.y_title &&
-                                            typeof table.rows[index][column] ===
-                                                "number"
-                                        ) {
-                                            return (
-                                                <MenuItem
-                                                    key={`x-${index}`}
-                                                    value={column}
-                                                >
-                                                    {column}
-                                                </MenuItem>
-                                            );
-                                        }
+                                {table.columns.map((column, index) => {
+                                    const isNumber =
+                                        typeof table.rows[index][column] === "number";
+
+                                    if (column !== chart.y_title && isNumber) {
+                                        return (
+                                            <MenuItem key={`x-${index}`} value={column}>
+                                                {column}
+                                            </MenuItem>
+                                        );
                                     }
-                                )}
+
+                                    return null;
+                                })}
                             </Select>
                         </FormControl>
                     </Grid>
@@ -127,24 +105,20 @@ export const Cluster: FC = () => {
                                     dispatch(setChartYTitle(e.target.value))
                                 }
                             >
-                                {table.columns.map(
-                                    (column: string, index: number) => {
-                                        if (
-                                            column !== chart.x_title &&
-                                            typeof table.rows[index][column] ===
-                                                "number"
-                                        ) {
-                                            return (
-                                                <MenuItem
-                                                    key={`y-${index}`}
-                                                    value={column}
-                                                >
-                                                    {column}
-                                                </MenuItem>
-                                            );
-                                        }
+                                {table.columns.map((column, index) => {
+                                    const isNumber =
+                                        typeof table.rows[index][column] === "number";
+
+                                    if (column !== chart.x_title && isNumber) {
+                                        return (
+                                            <MenuItem key={`y-${index}`} value={column}>
+                                                {column}
+                                            </MenuItem>
+                                        );
                                     }
-                                )}
+
+                                    return null;
+                                })}
                             </Select>
                         </FormControl>
                     </Grid>
@@ -161,46 +135,37 @@ export const Cluster: FC = () => {
                                     dispatch(setChartAlgName(e.target.value))
                                 }
                             >
-                                {Object.keys(algorithms).map(
-                                    (alg: string, index: number) => {
-                                        return (
-                                            <MenuItem
-                                                key={`alg-${index}`}
-                                                value={alg}
-                                            >
-                                                {alg}
-                                            </MenuItem>
-                                        );
-                                    }
-                                )}
+                                {Object.keys(algorithms).map((alg, index) => (
+                                    <MenuItem key={`alg-${index}`} value={alg}>
+                                        {alg}
+                                    </MenuItem>
+                                ))}
                             </Select>
                         </FormControl>
                     </Grid>
 
-                    {chart.alg.name !== "" &&
-                        algorithms[chart.alg.name].map((prop: string, index: number) => {
-                            return (
-                                <Grid item xs={12} lg={4} key={index}>
-                                    <TextField
-                                        key={`${chart.alg.name}-${prop}`}
-                                        sx={{ width: 1 }}
-                                        id="chart-title"
-                                        label={prop}
-                                        type="number"
-                                        variant="outlined"
-                                        onChange={(e) =>
-                                            dispatch(
-                                                setChartAlgProps([index, Number(e.target.value)])
-                                            )
-                                        }
-                                        value={chart.alg.props[index]}
-                                    />
-                                </Grid>
-                            );
-                        })
-                    }
+                    {chart.alg.name !== "" && algorithms[chart.alg.name]?.map((prop, index) => (
+                        <Grid item xs={12} lg={4} key={index}>
+                            <TextField
+                                key={`${chart.alg.name}-${prop}`}
+                                sx={{ width: 1 }}
+                                id="chart-title"
+                                label={prop}
+                                type="number"
+                                InputProps={{
+                                    inputProps: { min: 2 },
+                                }}
+                                variant="outlined"
+                                onChange={(e) =>
+                                    dispatch(setChartAlgProps([index, Number(e.target.value)]))
+                                }
+                                value={chart.alg.props[index] || 0}
+                            />
+                        </Grid>
+                    ))}
 
-                    <Chart />
+                    <Plot />
+
                 </Grid>
             )}
         </>

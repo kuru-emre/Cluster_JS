@@ -1,4 +1,4 @@
-import { setCentroids, setClusters, useAppDispatch, useAppSelector } from "../../redux";
+import { setChartData, setStatus, useAppDispatch, useAppSelector } from "../../redux";
 import { AxisType } from "../../types";
 import {
     assignDataToCentroids,
@@ -12,25 +12,58 @@ export const useAlgorithms = () => {
     const chart = useAppSelector((state) => state.chart);
 
     const kmeans = async () => {
+        // Initialize required variables.
         const k = chart.alg.props[0]
+        const data = chart.data.flat();
+        const start = true;
+        let tries = 0
+
+        // Initialize empty array (type of AxisType[]) to fill data later.
         let clusters: AxisType[][] = [];
-        let newCentroids: AxisType[] = []
+        let centroids: AxisType[] = [];
+        let newCentroids: AxisType[] = [];
 
-        // Step 1: Initialize centroids randomly
-        let centroids = initializeCentroids(chart.data, k)
-        dispatch(setCentroids(centroids))
+        // Fill centroids arrays with randomized, k-length centroid points, update the global state.
+        const kmeansIteration = async () => {
+            if (tries >= 3) {
+                dispatch(setStatus(`Too complex for k=${k} clusters. Try reducing the k parameter.`));
+                return
+            }
 
-        while (!centroidsEqual(centroids, newCentroids)) {
-            
-            clusters = await assignDataToCentroids(chart.data, centroids);
-            dispatch(setClusters(clusters))
-
-            // Step 3: Recalculate the centroids
-            newCentroids = await calculateNewCentroids(clusters);
-            dispatch(setCentroids(newCentroids))
+            centroids = await initializeCentroids(data, k);
+            dispatch(setStatus("Initializing random centroids..."));
+            dispatch(setChartData([centroids, data]));
 
 
+            // Loop over data points, assign clusters and re-calculate new centroid locations until current and new centroids are same.
+            while (start) {
+                clusters = await assignDataToCentroids(data, centroids);
+                dispatch(setStatus("Assigning point to centroids..."));
+
+                for (const cluster of clusters) {
+                    if (cluster.length === 0) {
+                        dispatch(setStatus("Having difficulties, trying again..."));
+                        await kmeansIteration();
+                        tries++;
+                    }
+                }
+
+                dispatch(setChartData([centroids, ...clusters]));
+
+                newCentroids = await calculateNewCentroids(clusters);
+                dispatch(setChartData([newCentroids, ...clusters]));
+                dispatch(setStatus("Generating new centroids..."));
+
+                if (centroidsEqual(centroids, newCentroids)) {
+                    break;
+                }
+
+                centroids = newCentroids;
+            }
         }
+
+        await kmeansIteration()
+
     };
 
     return { kmeans };
