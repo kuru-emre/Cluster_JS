@@ -1,10 +1,9 @@
 import { ChangeEvent, FC } from "react";
 import { useAppDispatch, useAppSelector, setImage } from "../redux";
-import { useAlgorithms } from "../utils";
 
 export const Quantize: FC = () => {
     const dispatch = useAppDispatch();
-    const { quantizer } = useAlgorithms();
+    // const { quantizer } = useAlgorithms();
     const input = useAppSelector((state) => state.image);
 
     return (
@@ -35,9 +34,7 @@ export const Quantize: FC = () => {
             </div>
 
 
-            <div>
-                <button onClick={() => quantizer()}>Test</button>
-            </div>
+
         </div>
     );
 };

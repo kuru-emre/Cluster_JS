@@ -9,7 +9,7 @@ export const FileReader: FC = () => {
     const textURL = useRef<HTMLTextAreaElement>();
     const dispatch = useAppDispatch();
 
-    const readData = async (file: Blob | File | null) => {
+    const readData = async (file: File | null) => {
         const dataset = await file?.arrayBuffer();
         const workbook = read(dataset);
         const worksheet = workbook.Sheets[workbook.SheetNames[0]];
@@ -84,7 +84,7 @@ export const FileReader: FC = () => {
                             await fetchURL(
                                 textURL.current?.value ?? "",
                                 "dataset"
-                            )
+                            ) as File
                         )
                     }
                 >
