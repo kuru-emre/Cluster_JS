@@ -1,15 +1,12 @@
 import { setChartData, setStatus, useAppDispatch, useAppSelector } from "../../redux";
 import { AxisType } from "../../types";
-import {
-    assignDataToCentroids,
-    calculateNewCentroids,
-    centroidsEqual,
-    initializeCentroids,
-} from "../algorithms/kMeans";
+import { assignDataToCentroids, calculateNewCentroids, centroidsEqual, initializeCentroids } from "../algorithms/kMeans";
+import { quantize } from "../algorithms/quantize";
 
 export const useAlgorithms = () => {
     const dispatch = useAppDispatch();
     const chart = useAppSelector((state) => state.chart);
+    const image = useAppSelector((state) => state.image);
 
     const kmeans = async () => {
         // Initialize required variables.
@@ -66,5 +63,10 @@ export const useAlgorithms = () => {
 
     };
 
-    return { kmeans };
+    const quantizer = () => {
+        quantize(image.img, image.k);
+
+    }
+
+    return { kmeans, quantizer };
 };

@@ -1,6 +1,16 @@
 import { ThemeOptions, createTheme } from "@mui/material/styles";
 
 export const theme: ThemeOptions = createTheme({
+    components: {
+        MuiCssBaseline: {
+            styleOverrides: {
+                body: {
+                    background: `radial-gradient(circle, rgba(255,219,145,0.95) 5%, rgba(85,98,162,1) 71%)`,
+                    height: "100vh"
+                }
+            }
+        }
+    },
     palette: {
         mode: "light",
         primary: {
@@ -22,11 +32,15 @@ export const theme: ThemeOptions = createTheme({
     spacing: 4,
     breakpoints: {
         values: {
-          xs: 0,
-          sm: 600,
-          md: 900,
-          lg: 1200,
-          xl: 1536,
+            xs: 0,
+            sm: 600,
+            md: 900,
+            lg: 1200,
+            xl: 1536,
         },
-      },
+    },
+    shape: {
+        borderRadius: 8,
+    },
 });
+

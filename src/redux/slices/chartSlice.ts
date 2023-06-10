@@ -2,7 +2,6 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ChartType } from "../../types";
 
 const initialState: ChartType = {
-    title: "",
     x_title: "",
     y_title: "",
     data: [],
@@ -17,9 +16,6 @@ export const chartSlice = createSlice({
     name: "chart",
     initialState,
     reducers: {
-        setChartTitle: (state, action: PayloadAction<ChartType["title"]>) => {
-            state.title = action.payload;
-        },
         setChartXTitle: (state,action: PayloadAction<ChartType["x_title"]>) => {
             state.x_title = action.payload;
         },
@@ -46,7 +42,6 @@ export const chartSlice = createSlice({
 });
 
 export const {
-    setChartTitle,
     setChartXTitle,
     setChartYTitle,
     setChartData,

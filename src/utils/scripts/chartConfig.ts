@@ -37,15 +37,6 @@ export const chartConfig = (props: ChartType) => {
             datasets: isClustered(props)
         },
         options: {
-            plugins: {
-                title: {
-                    display: true,
-                    text: props.title,
-                    font: {
-                        size: 18
-                    }
-                }
-            },
             maintainAspectRatio: false,
             scales: {
                 y: {

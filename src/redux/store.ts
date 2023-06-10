@@ -1,9 +1,10 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import { chartReducer, tableReducer } from "./slices";
+import { chartReducer, imageReducer, tableReducer } from "./slices";
 
 const reducers = combineReducers({
     chart: chartReducer,
-    table: tableReducer
+    table: tableReducer,
+    image: imageReducer
 });
 
 export const store = configureStore({

@@ -26,7 +26,7 @@ export const FileReader: FC = () => {
         dispatch(setTableRows(rows));
     };
     return (
-        <Grid container spacing={4} xs={12}>
+        <Grid container spacing={3}>
             <Grid item xs={12}>
                 <Typography variant="h5" align="center">
                     You can your local dataset or use an url to upload.
