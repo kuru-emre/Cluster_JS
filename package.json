@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://emrekuru2.github.io/cluster_js",
+  "homepage": "https://kuru-emre.github.io/cluster_js",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
