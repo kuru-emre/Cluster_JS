@@ -10,14 +10,17 @@ import { Delete } from "@mui/icons-material";
 import { TableType } from "../../types";
 import { FC } from "react";
 import { StyledDataGrid } from "./styles";
+import { useSnackbar } from "notistack";
 
 export const DataTable: FC<TableType> = (props) => {
   const table = useAppSelector((state) => state.table);
   const dispatch = useAppDispatch();
+  const { enqueueSnackbar } = useSnackbar();
 
   const removeData = () => {
     dispatch(resetTable());
     dispatch(resetChart());
+    enqueueSnackbar("Data removed successfully!", { variant: "success" });
   };
 
   const columns = () => {
@@ -68,7 +71,7 @@ export const DataTable: FC<TableType> = (props) => {
           initialState={{
             pagination: {
               paginationModel: {
-                pageSize: 12,
+                pageSize: 10,
               },
             },
           }}

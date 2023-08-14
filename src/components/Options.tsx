@@ -22,18 +22,31 @@ import {
 } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import { algorithms, useAlgorithms } from "../utils";
+import { useSnackbar } from "notistack";
 
 export const Options: FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showResult, setShowResult] = useState(false);
   const [preventCallback, setPreventCallback] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
   const chart = useAppSelector((state) => state.chart);
   const table = useAppSelector((state) => state.table);
   const dispatch = useAppDispatch();
   const { kmeans } = useAlgorithms();
 
   const startCluster = async () => {
+    if (chart.alg.props.every((item) => item <= 0 || item > 5)) {
+      enqueueSnackbar(
+        `Cluster.js does not support ${chart.alg.props} clusters.`,
+        { variant: "error" },
+      );
+      return;
+    }
+
     if (chart.alg.name == "" && preventCallback) {
+      enqueueSnackbar("Make sure to select your algorithm", {
+        variant: "error",
+      });
       return;
     }
 
@@ -55,6 +68,9 @@ export const Options: FC = () => {
 
     setIsLoading(false);
     setShowResult(true);
+    enqueueSnackbar("Clustering finished successfully!", {
+      variant: "success",
+    });
   };
 
   const resetCluster = () => {
@@ -62,6 +78,7 @@ export const Options: FC = () => {
       setPreventCallback(false);
       setShowResult(false);
       dispatch(resetChart());
+      enqueueSnackbar("Clustering has been reset", { variant: "success" });
     }
   };
 
@@ -171,14 +188,11 @@ export const Options: FC = () => {
               id="chart-title"
               label={prop}
               type="number"
-              InputProps={{
-                inputProps: { min: 2 },
-              }}
               variant="outlined"
               onChange={(e) =>
                 dispatch(setChartAlgProps([index, Number(e.target.value)]))
               }
-              value={chart.alg.props[index] || 0}
+              value={chart.alg.props[index] ?? 0}
             />
           </Grid>
         ))}
