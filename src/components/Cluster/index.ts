@@ -1,2 +1,2 @@
-export * from "./styles"
-export { Cluster } from "./Cluster"
+export * from "./styles";
+export { Cluster } from "./Cluster";

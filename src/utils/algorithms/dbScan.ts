@@ -1,3 +1,3 @@
 export const dbScan = () => {
-    return null
-}
+  return null;
+};

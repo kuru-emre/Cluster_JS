@@ -1,3 +1,3 @@
 export type RowType = {
-    [key: string]: number;
+  [key: string]: number;
 };
