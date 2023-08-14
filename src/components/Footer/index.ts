@@ -1,2 +1,2 @@
-export * from './styles'
-export { Footer } from "./Footer"
+export * from "./styles";
+export { Footer } from "./Footer";

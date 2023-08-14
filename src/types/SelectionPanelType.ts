@@ -1,4 +1,4 @@
 export type SelectionPanelType = {
-    titles: string[];
-    components: React.ReactNode[];
+  titles: string[];
+  components: React.ReactNode[];
 };

@@ -1,2 +1,2 @@
 export { SelectionPanel } from "./SelectionPanel";
-export * from "./styles"
+export * from "./styles";

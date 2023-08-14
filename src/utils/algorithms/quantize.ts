@@ -23,7 +23,6 @@
 //     reader.readAsDataURL(input);
 // };
 
-
 // const initializeCentroids = (data: number[][], k: number) => {
 //     const centroids: number[][] = [];
 
@@ -31,7 +30,6 @@
 //     for (let i = 0; i < k; i++) {
 //         centroids.push(getRndPoint(data));
 //     }
-
 
 // };
 

@@ -1,2 +1,2 @@
-export { Header } from "./Header"
-export * from "./styles"
+export { Header } from "./Header";
+export * from "./styles";

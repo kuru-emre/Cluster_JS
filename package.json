@@ -1,5 +1,5 @@
 {
-  "name": "cluster_js",
+  "name": "portfolio",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,20 +7,24 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "predeploy": "tsc && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview",
+    "predeploy": "yarn build",
     "deploy": "gh-pages -d dist",
-    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "format": "prettier --write src"
   },
   "dependencies": {
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.13.0",
+    "@mui/system": "^5.14.5",
     "@mui/x-data-grid": "^6.4.0",
     "@reduxjs/toolkit": "^1.9.5",
     "chart.js": "^4.3.0",
     "chartjs-to-image": "^1.2.1",
+    "framer-motion": "^10.12.20",
+    "notistack": "^3.0.1",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
@@ -29,17 +33,18 @@
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.19.3/xlsx-0.19.3.tgz"
   },
   "devDependencies": {
-    "@types/react": "^18.0.28",
-    "@types/react-dom": "^18.0.11",
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
     "@types/react-swipeable-views": "^0.13.1",
-    "@typescript-eslint/eslint-plugin": "^5.57.1",
-    "@typescript-eslint/parser": "^5.57.1",
-    "@vitejs/plugin-react": "^4.0.0",
-    "eslint": "^8.38.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "@vitejs/plugin-react-swc": "^3.3.2",
+    "eslint": "^8.45.0",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.3.4",
+    "eslint-plugin-react-refresh": "^0.4.3",
     "gh-pages": "^5.0.0",
+    "prettier": "^3.0.1",
     "typescript": "^5.0.2",
-    "vite": "^4.3.9"
+    "vite": "^4.4.5"
   }
 }

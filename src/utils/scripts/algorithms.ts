@@ -1,8 +1,8 @@
 type initial = {
-    [key: string]: string[];
+  [key: string]: string[];
 };
 
 export const algorithms: initial = {
-    kmeans: ["k"],
-    dbscan: ["rad", "neighbours"],
+  kmeans: ["k"],
+  dbscan: ["rad", "neighbours"],
 };
